@@ -27,13 +27,13 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.8.1"
 
-  name = "education-vpc"
+  name = "talent-vpc"
 
-  cidr = "10.0.0.0/16"
+  cidr = "10.0.0.0/23"
   azs  = slice(data.aws_availability_zones.available.names, 0, 3)
 
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+  private_subnets = ["10.0.1.0/26", "10.0.2.0/26", "10.0.3.0/26"]
+  public_subnets  = ["10.0.4.0/26", "10.0.5.0/26", "10.0.6.0/26"]
 
   enable_nat_gateway   = true
   single_nat_gateway   = true
@@ -78,7 +78,7 @@ module "eks" {
 
       instance_types = ["t3.small"]
 
-      min_size     = 1
+      min_size     = 0
       max_size     = 3
       desired_size = 2
     }
@@ -86,11 +86,11 @@ module "eks" {
     two = {
       name = "node-group-2"
 
-      instance_types = ["t3.small"]
+      instance_types = ["t2.small"]
 
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
+      min_size     = 0
+      max_size     = 3
+      desired_size = 2
     }
   }
 }
@@ -111,3 +111,5 @@ module "irsa-ebs-csi" {
   role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
 }
+
+*/
